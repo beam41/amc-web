@@ -6,8 +6,8 @@
     type PointsGroups,
   } from '$lib/ui/MtMap/MtMap.svelte';
   import type { TrackData, WaypointEuler } from '../types';
-  import mapImage from '$lib/assets/map.png';
-  import roadImage from '$lib/assets/road.svg';
+  import mapImage from '$lib/assets/images/map.avif';
+  import roadImage from '$lib/assets/images/road.svg';
   import Card from '$lib/ui/Card/Card.svelte';
   import Button from '$lib/ui/Button/Button.svelte';
   import TextInput from '$lib/ui/TextInput/TextInput.svelte';

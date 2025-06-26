@@ -7,6 +7,7 @@ const config: StorybookConfig = {
     name: '@storybook/sveltekit',
     options: {},
   },
+  staticDirs: ['../static'],
   previewHead: (head) => `
     ${head}
     <link
