@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
-  import Map from 'ol/Map.js';
-  import View from 'ol/View.js';
-  import TileLayer from 'ol/layer/Tile.js';
+  import Map from 'ol/Map';
+  import View from 'ol/View';
+  import TileLayer from 'ol/layer/Tile';
   import 'ol/ol.css';
   import { Projection } from 'ol/proj';
   import { ImageTile } from 'ol/source';
@@ -37,7 +37,13 @@
   };
 
   let target: HTMLDivElement;
-  const { class: propsClassName, zoomClass, zoomInClass, zoomOutClass }: OlMapProps = $props();
+  const {
+    class: propsClassName,
+    zoomClass,
+    zoomInClass,
+    zoomOutClass,
+    layers,
+  }: OlMapProps = $props();
 
   onMount(() => {
     const projection = new Projection({
@@ -59,12 +65,13 @@
         new TileLayer({
           source: new ImageTile({
             url: '/map_tiles/{z}_{x}_{y}.avif',
-            minZoom: 1,
+            minZoom: 2,
             maxZoom: 6,
             wrapX: false,
             projection: projection,
           }),
         }),
+        ...(layers ?? []),
       ],
       target: target,
       view: new View({

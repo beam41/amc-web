@@ -99,7 +99,7 @@ Example usage:
 
 ```svelte
 <script lang="ts">
-  import * as m from '$lib/paraglide/messages.js';
+  import * as m from '$lib/paraglide/messages';
 </script>
 
 <h1>{m.hello_world()}</h1>
