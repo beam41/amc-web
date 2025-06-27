@@ -12,6 +12,7 @@
   import clsx from 'clsx';
   import type BaseLayer from 'ol/layer/Base';
   import { MAP_REAL_SIZE } from './utils';
+  import type { MapBrowserEvent } from 'ol';
 
   export type OlMapProps = {
     /**
@@ -34,15 +35,20 @@
      * The class to apply to ol zoom out button
      */
     zoomOutClass?: ClassValue;
+    /**
+     * Callback for pointer move events
+     */
+    onPointerMove?: (e: MapBrowserEvent<KeyboardEvent | WheelEvent | PointerEvent>) => void;
   };
 
   let target: HTMLDivElement;
-  const {
+  let {
     class: propsClassName,
     zoomClass,
     zoomInClass,
     zoomOutClass,
     layers,
+    onPointerMove,
   }: OlMapProps = $props();
 
   onMount(() => {
@@ -88,7 +94,14 @@
       }),
     });
 
+    const handlePointerMove = (e: MapBrowserEvent<KeyboardEvent | WheelEvent | PointerEvent>) => {
+      onPointerMove?.(e);
+    };
+
+    map.on('pointermove', handlePointerMove);
+
     return () => {
+      map.un('pointermove', handlePointerMove);
       map.setTarget();
     };
   });
