@@ -2,10 +2,11 @@ import type { Vector2 } from '$lib/components/TrackEditor/types';
 import areaVolume from '$lib/assets/data/out_area_volume.json';
 
 const flagOrder = {
-  'EMTAreaVolumeFlags::RaceTrack': 0,
-  'EMTAreaVolumeFlags::SmallArea': 1,
-  'EMTAreaVolumeFlags::LargeArea': 2,
-  'EMTAreaVolumeFlags::Zone': 3,
+  '': 0,
+  'EMTAreaVolumeFlags::RaceTrack': 1,
+  'EMTAreaVolumeFlags::SmallArea': 2,
+  'EMTAreaVolumeFlags::LargeArea': 3,
+  'EMTAreaVolumeFlags::Zone': 4,
 } as Record<string, number>;
 
 // Precompute bounding boxes for all areas
