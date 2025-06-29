@@ -37,7 +37,7 @@
     if (!hoverInfo) {
       return '';
     }
-    
+
     return getLocationAtPoint(hoverInfo.coord);
   });
 </script>
@@ -57,7 +57,7 @@
       <div class="text-sm whitespace-nowrap">
         {hoverInfo.name}
       </div>
-      <div class="text-text-dark/60 mt-0.5 text-xs font-semibold whitespace-nowrap">
+      <div class="mt-0.5 text-xs font-semibold whitespace-nowrap text-neutral-300">
         {locationText}
       </div>
     </Card>

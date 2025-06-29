@@ -1,6 +1,13 @@
 import type { Vector2 } from '$lib/components/TrackEditor/types';
 import areaVolume from '$lib/assets/data/out_area_volume.json';
 
+const flagOrder = {
+  'EMTAreaVolumeFlags::RaceTrack': 0,
+  'EMTAreaVolumeFlags::SmallArea': 1,
+  'EMTAreaVolumeFlags::LargeArea': 2,
+  'EMTAreaVolumeFlags::Zone': 3,
+} as Record<string, number>;
+
 // Precompute bounding boxes for all areas
 const areaVolumeWithBBox = areaVolume.map((area) => {
   let minX = Infinity,
@@ -13,14 +20,11 @@ const areaVolumeWithBBox = areaVolume.map((area) => {
     if (v.y < minY) minY = v.y;
     if (v.y > maxY) maxY = v.y;
   }
-  return { ...area, box: { minX, minY, maxX, maxY } };
+  return { ...area, order: flagOrder[area.flag], box: { minX, minY, maxX, maxY } };
 });
 
 export const getLocationAtPoint = (point: Vector2) => {
-  let racetrack: string | undefined;
-  let small: string | undefined;
-  let large: string | undefined;
-  let zone: string | undefined;
+  const matchArea: typeof areaVolumeWithBBox = [];
 
   for (let idx = 0; idx < areaVolumeWithBBox.length; idx++) {
     const area = areaVolumeWithBBox[idx];
@@ -47,45 +51,11 @@ export const getLocationAtPoint = (point: Vector2) => {
       }
     }
     if (count % 2 === 1) {
-      switch (area.flag) {
-        case 'EMTAreaVolumeFlags::RaceTrack':
-          racetrack = area.name;
-          break;
-        case 'EMTAreaVolumeFlags::SmallArea':
-          small = area.name;
-          break;
-        case 'EMTAreaVolumeFlags::LargeArea':
-          large = area.name;
-          break;
-        case 'EMTAreaVolumeFlags::Zone':
-          zone = area.name;
-          break;
-      }
+      matchArea.push(area);
     }
   }
 
-  let result = '';
-  if (racetrack) {
-    result += racetrack;
-  }
-  if (small) {
-    if (result.length > 0) {
-      result += ', ';
-    }
-    result += small;
-  }
-  if (large) {
-    if (result.length > 0) {
-      result += ', ';
-    }
-    result += large;
-  }
-  if (zone) {
-    if (result.length > 0) {
-      result += ', ';
-    }
-    result += zone;
-  }
+  matchArea.sort((a, b) => a.order - b.order);
 
-  return result;
+  return matchArea.map((area) => area.name).join(', ');
 };
