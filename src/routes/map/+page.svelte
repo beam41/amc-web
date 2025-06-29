@@ -136,6 +136,7 @@
         name: f.get('name'),
         pixelCoord: e.pixel as [number, number],
         coord: f.get('coord'),
+        info: f.get('info'),
       };
       hoverPoint = f;
       return true;
