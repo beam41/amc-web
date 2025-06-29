@@ -17,13 +17,19 @@ const areaVolumeWithBBox = areaVolume.map((area) => {
 });
 
 export const getLocationAtPoint = (point: Vector2) => {
-  const matchLocations = areaVolumeWithBBox.filter((area) => {
+  let racetrack: string | undefined;
+  let small: string | undefined;
+  let large: string | undefined;
+  let zone: string | undefined;
+
+  for (let idx = 0; idx < areaVolumeWithBBox.length; idx++) {
+    const area = areaVolumeWithBBox[idx];
     const inBoundingBox =
       point.x >= area.box.minX &&
       point.x <= area.box.maxX &&
       point.y >= area.box.minY &&
       point.y <= area.box.maxY;
-    if (!inBoundingBox) return false;
+    if (!inBoundingBox) continue;
 
     let count = 0;
     for (let i = 0; i < area.vertex.length; i += 2) {
@@ -40,30 +46,23 @@ export const getLocationAtPoint = (point: Vector2) => {
         }
       }
     }
-    return count % 2 === 1;
-  });
-
-  let racetrack: string | undefined;
-  let small: string | undefined;
-  let large: string | undefined;
-  let zone: string | undefined;
-
-  matchLocations.forEach((m) => {
-    switch (m.flag) {
-      case 'EMTAreaVolumeFlags::RaceTrack':
-        racetrack = m.name;
-        break;
-      case 'EMTAreaVolumeFlags::SmallArea':
-        small = m.name;
-        break;
-      case 'EMTAreaVolumeFlags::LargeArea':
-        large = m.name;
-        break;
-      case 'EMTAreaVolumeFlags::Zone':
-        zone = m.name;
-        break;
+    if (count % 2 === 1) {
+      switch (area.flag) {
+        case 'EMTAreaVolumeFlags::RaceTrack':
+          racetrack = area.name;
+          break;
+        case 'EMTAreaVolumeFlags::SmallArea':
+          small = area.name;
+          break;
+        case 'EMTAreaVolumeFlags::LargeArea':
+          large = area.name;
+          break;
+        case 'EMTAreaVolumeFlags::Zone':
+          zone = area.name;
+          break;
+      }
     }
-  });
+  }
 
   let result = '';
   if (racetrack) {
